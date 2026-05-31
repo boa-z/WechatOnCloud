@@ -305,8 +305,10 @@ docker compose stop panel                 # 1) 先停面板，避免覆盖你的
 ```
 
 ```bash
-docker compose up -d                       # 3) 重启，面板启动时会重置该账号
+docker compose up -d                       # 3) 启动，面板初始化时会重置该账号
 ```
+
+> ⚠️ 重置逻辑只在面板**进程启动**时执行。若你没先 `stop` 而面板仍在运行，直接 `docker compose up -d` 会因「容器无变化」而空操作（输出 `Running` 而非 `Started`），重置不会发生。此时执行 **`docker compose restart panel`**（或 `docker restart woc-panel`）强制重启即可生效。
 
 重启后该账号密码被重置为 `PANEL_ADMIN_PASSWORD`（即 `.env` 的 `WOC_PASSWORD`，默认 `wechat`），并自动**解禁**、清除该标记；用此密码登录后请立即在「修改密码」改掉。日志会打印 `[store] 已重置用户 '<用户名>' 的密码`。
 
