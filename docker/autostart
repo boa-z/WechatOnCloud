@@ -67,11 +67,11 @@ if [ -f /config/.woc-fc-local.conf ]; then
 fi
 #     确保 ~/.local/share/fonts → /config/.fonts symlink 存在（旧容器升级兼容）
 mkdir -p /config/.fonts 2>/dev/null || true
-if [ ! -L /home/abc/.local/share/fonts ] && [ ! -d /home/abc/.local/share/fonts ]; then
-    mkdir -p /home/abc/.local/share 2>/dev/null || true
-    ln -sfn /config/.fonts /home/abc/.local/share/fonts 2>/dev/null || true
+if [ ! -L /config/.local/share/fonts ] && [ ! -d /config/.local/share/fonts ]; then
+    mkdir -p /config/.local/share 2>/dev/null || true
+    ln -sfn /config/.fonts /config/.local/share/fonts 2>/dev/null || true
 fi
-FONT_CONF="/home/abc/.config/fontconfig/fonts.conf"
+FONT_CONF="/config/.config/fontconfig/fonts.conf"
 FONT_FAMILY_FILE="/config/.woc-font-family"
 if [ -f "$FONT_FAMILY_FILE" ]; then
     family=$(cat "$FONT_FAMILY_FILE")
@@ -127,7 +127,7 @@ elif [ -f "$FONT_CONF" ]; then
 fi
 
 # 3) 启动 xsettingsd（让 GTK/Qt 应用实时响应字体/DPI 等 XSETTINGS 变更，无需重启）
-XSETTINGS_CONF="/home/abc/.xsettingsd"
+XSETTINGS_CONF="/config/.xsettingsd"
 if command -v xsettingsd >/dev/null 2>&1; then
     XSETTINGS_FONT="WenQuanYi Micro Hei"
     # 若用户保存了字体偏好，优先使用

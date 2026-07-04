@@ -1169,7 +1169,7 @@ export async function applyFont(inst: Instance, fontFile: string): Promise<void>
   } else {
     // 清除偏好，回退默认（文泉驿等系统字体）
     await execCapture(inst, ['rm', '-f', '/etc/fonts/local.conf', '/config/.woc-fc-local.conf'], 'root');
-    await execCapture(inst, ['rm', '-f', '/home/abc/.config/fontconfig/fonts.conf']);
+    await execCapture(inst, ['rm', '-f', '/config/.config/fontconfig/fonts.conf']);
     await execCapture(inst, ['fc-cache', '-f'], 'root');
     await execCapture(inst, ['rm', '-f', FONT_SEL_FILE, `${FONT_SEL_FILE}-family`]);
     applyXsettingsFont(inst, 'WenQuanYi Micro Hei').catch(() => {});
@@ -1177,7 +1177,7 @@ export async function applyFont(inst: Instance, fontFile: string): Promise<void>
 }
 
 async function applyXsettingsFont(inst: Instance, family: string): Promise<void> {
-  const conf = '/home/abc/.xsettingsd';
+  const conf = '/config/.xsettingsd';
   const lines = [
     'Xft/Antialias 1',
     'Xft/Hinting 1',
@@ -1187,7 +1187,7 @@ async function applyXsettingsFont(inst: Instance, family: string): Promise<void>
     `Gtk/FontName "${family} 10"`,
   ];
   await execCapture(inst, ['sh', '-c', `printf '%s\\n' ${lines.map(l => `'${l}'`).join(' ')} > ${conf}`]);
-  await execCapture(inst, ['sh', '-c', 'pkill -HUP xsettingsd 2>/dev/null || xsettingsd --config=/home/abc/.xsettingsd 2>/dev/null &']);
+  await execCapture(inst, ['sh', '-c', 'pkill -HUP xsettingsd 2>/dev/null || xsettingsd --config=/config/.xsettingsd 2>/dev/null &']);
 }
 
 // 返回当前选中的字体文件名，空字符串表示默认

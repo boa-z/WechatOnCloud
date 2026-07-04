@@ -53,10 +53,8 @@ RUN set -eux; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*
 
-# 预建 fontconfig 目录 + 用户字体目录 symlink（持久化到 /config/.fonts）
-RUN mkdir -p /home/abc/.config/fontconfig /config/.fonts /home/abc/.local/share && \
-    ln -sfn /config/.fonts /home/abc/.local/share/fonts && \
-    chown -R 1000:1000 /home/abc/.config /home/abc/.local
+# 字体/字体配置目录都在会话 HOME=/config 下（数据卷，运行时才挂载），故不在此预建；
+# 由 autostart 在启动时按需 mkdir + 建 ~/.local/share/fonts → /config/.fonts 软链（见 docker/autostart）。
 
 ENV LANG=zh_CN.UTF-8 \
     LC_ALL=zh_CN.UTF-8 \
